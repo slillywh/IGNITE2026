@@ -1,0 +1,114 @@
+---
+title: "Ignite Data"
+format: html
+editor: visual
+---
+
+## IGNITE CAPSTONE
+
+## Bringing in the Data and Setting up the Library
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(dplyr)
+library(lme4)
+library(lmerTest)
+library(ggpubr)
+
+IGNITE_Data_Sheet <- read_excel("IGNITE Data Sheet.xlsx", 
+                                sheet = "RCoding")
+
+```
+
+Data is already really clean, will save the chunk below in case of data cleaning
+
+```{r}
+#data cleaning here!
+#There is one reading of black mustard that is 600 FMC, will take that out
+
+IGNITE_Data_Sheet_2 <- IGNITE_Data_Sheet |> 
+  filter( FMC < 500) |> 
+  mutate(Site = as.factor(Site))
+
+
+```
+
+Exploratory Data Graphing
+
+```{r}
+ggplot(IGNITE_Data_Sheet_2) +
+  aes(x = Species, y = FMC, fill = as.factor(Site)) + 
+  geom_col()+
+  scale_fill_brewer(palette = "Set2")+
+  theme_bw()
+
+
+ggplot(IGNITE_Data_Sheet_2)+
+  aes(x = Species, y = Wet_Mass)+
+  geom_boxplot()+
+  theme_bw()
+
+ggplot(IGNITE_Data_Sheet_2)+
+  aes(x = Species, y = Dry_Mass)+
+  geom_boxplot()+
+  theme_bw()
+```
+
+In this very rough estimate you can see that our buckwheat had the highest combined FMC for the first sampling event
+
+We need to collect alot more of each species, 2 inches from four sides of the plant (8 inches total) is not enough (except for lemonade berry
+
+Sagebrush dried the most between wet and dry weight
+
+```{r}
+
+IGNITE_Summary <- IGNITE_Data_Sheet_2 |> 
+  group_by(Species, Site ) |> 
+  summarize(Mean_FMC = mean(FMC, na.rm = TRUE),
+            sd_FMC = sd(FMC, na.rm = TRUE))
+
+ggplot(IGNITE_Summary) +
+  aes(x = Species, y = Mean_FMC, fill = Species)+
+  geom_col(position = "dodge")+
+  geom_errorbar(aes(ymin = Mean_FMC - sd_FMC, 
+                ymax = Mean_FMC + sd_FMC, width = 0.5))+
+                  facet_wrap(Site~.)+
+                  theme_bw()
+
+```
+
+The sagebrush error bars in site 4 can be explained by the very different masses collected at the site
+
+```{r}
+ggplot(IGNITE_Summary) +
+  aes(x = Species, y = Mean_FMC, fill = Species)+
+  geom_col(position = "dodge")+
+  theme_bw()
+
+
+```
+
+Mustard's numbers are inflated due to having little to 0 wet mass
+
+## Statistics
+
+Tests for Normality
+
+```{r}
+ggplot(IGNITE_Data_Sheet_2)+
+  aes(x = FMC)+
+  geom_histogram()
+#Data does not look that normal, will proceed
+
+FMC_model <- lmer(FMC~Species + Phenology + Percent_Green + (1 | Site/Bottle_ID), data = IGNITE_Data_Sheet_2)
+
+plot(FMC_model, which = "2")
+
+ggqqplot(residuals(FMC_model))
+
+summary(FMC_model)
+anova(FMC_model, type = "2")
+```
+
+There are significant differences between species and phenology (need to look more into this one )

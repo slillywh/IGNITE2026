@@ -1,0 +1,5 @@
+"0","ggplot(IGNITE_Data_Sheet_2) +"
+"0","  aes(x = Species, y = FMC, fill = as.factor(Site)) + "
+"0","  geom_col()+"
+"0","  scale_fill_brewer(palette = ""Set2"")+"
+"0","  theme_bw()"

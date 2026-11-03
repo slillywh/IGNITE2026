@@ -1,0 +1,7 @@
+"0","#data cleaning here!"
+"0","#There is one reading of black mustard that is 600 FMC, will take that out"
+"0",""
+"0","IGNITE_Data_Sheet_2 <- IGNITE_Data_Sheet |> "
+"0","  filter( FMC < 500)"
+"0",""
+"0",""
