@@ -120,7 +120,9 @@ ggplot(IGNITE_Data_Sheet_2)+
   aes(x = FMC)+
   geom_histogram()
 
-
+IGNITE_Data_Sheet_3 <- IGNITE_Data_Sheet_2 |> 
+  filter(Sample_ID != "1_ARCA_261116_3")
+  
 #Data does not look that normal, will proceed
 
 #FMC_model <- lmer(FMC ~ Species + Phenology + Percent_Green + (1 | Site/Bottle_ID) + (1| Date), data = IGNITE_Data_Sheet_2)
@@ -132,7 +134,7 @@ ggplot(IGNITE_Data_Sheet_2)+
 
 #Site and Bottle ID was causing the issue, will drop it for now...
 
-FMC_model <- lmer(FMC ~ Species + Phenology + Percent_Green  + (1| Date), data = IGNITE_Data_Sheet_2)
+FMC_model <- lmer(FMC ~ Species + Phenology + Percent_Green  + (1| Date), data = IGNITE_Data_Sheet_3)
 
 #Perfect, it no longer pops up
 hist(residuals(FMC_model))
@@ -165,6 +167,8 @@ Statistical differences:
 - Black Mustard - Lemonade Berry
 
 - California sagebrush - Lemonade Berry
+
+- Buckwheat - Sagebrush
 
 ```{r}
 IGNITE_Summary_Species <- IGNITE_Data_Sheet_2 |> 
