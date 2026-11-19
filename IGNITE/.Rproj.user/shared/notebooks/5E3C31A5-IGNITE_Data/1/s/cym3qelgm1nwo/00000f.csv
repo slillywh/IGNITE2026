@@ -1,4 +1,0 @@
-"0","ggplot(IGNITE_Summary) +"
-"0","  aes(x = Species, y = Mean_FMC, fill = Species)+"
-"0","  geom_col(position = ""dodge"")+"
-"0","  theme_bw()"

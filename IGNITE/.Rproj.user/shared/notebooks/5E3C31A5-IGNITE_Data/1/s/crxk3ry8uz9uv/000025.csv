@@ -1,5 +1,0 @@
-"0","#Data does not look that normal, will proceed"
-"0",""
-"0","FMC_model <- lmer(FMC~Species + Phenology + Percent_Green + (1 | Site), data = IGNITE_Data_Sheet_2)"
-"0",""
-"0","plot(FMC_model, which = ""2"")"
