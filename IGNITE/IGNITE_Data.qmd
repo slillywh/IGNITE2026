@@ -46,6 +46,7 @@ ggplot(IGNITE_Data_Sheet_2) +
   aes(x = Species, y = FMC, fill = as.factor(Site)) + 
   geom_col()+
   scale_fill_brewer(palette = "Set2")+
+  
   theme_bw()
 
 
@@ -171,7 +172,7 @@ Statistical differences:
 - Buckwheat - Sagebrush
 
 ```{r}
-IGNITE_Summary_Species <- IGNITE_Data_Sheet_2 |> 
+IGNITE_Summary_Species <- IGNITE_Data_Sheet_3 |> 
   filter(!(Species == "California sagebrush" & Phenology == "Dead")) |> 
   filter(!(Species == "California sagebrush" & Phenology == "Dormant")) |> 
   group_by(Species) |> 
@@ -211,7 +212,7 @@ These differences really make sense, nothing noteworthy from these
 
 ```{r}
 
-IGNITE_Summary_Phenology <- IGNITE_Data_Sheet_2 |> 
+IGNITE_Summary_Phenology <- IGNITE_Data_Sheet_3 |> 
   group_by(Species, Phenology ) |> 
   summarize(Mean_FMC = mean(FMC, na.rm = TRUE),
             sd_FMC = sd(FMC, na.rm = TRUE))

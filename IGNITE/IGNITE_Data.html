@@ -164,25 +164,44 @@ The following object is masked from 'package:stats':
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: package 'ggpubr' was built under R version 4.5.3</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>IGNITE_Data_Sheet <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"IGNITE Data Sheet.xlsx"</span>, </span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                                <span class="at">sheet =</span> <span class="st">"RCoding"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(googlesheets4)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'googlesheets4' was built under R version 4.5.3</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">#IGNITE_Data_Sheet &lt;- read_excel("IGNITE Data Sheet.xlsx", </span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>   <span class="co">#                             sheet = "RCoding")</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>IGNITE_Data_Sheet<span class="ot">&lt;-</span>googlesheets4<span class="sc">::</span><span class="fu">read_sheet</span>(<span class="st">"https://docs.google.com/spreadsheets/d/1Z7aurgQzPtNckHCvg0PXA97xKa3VXuFM_nTSHRgTMcY/edit?gid=125710380#gid=125710380"</span>, <span class="at">sheet =</span> <span class="st">"RCoding"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>! Using an auto-discovered, cached token.
+  To suppress this message, modify your code or options to clearly consent to
+  the use of a cached token.
+  See gargle's "Non-interactive auth" vignette for more details:
+  &lt;https://gargle.r-lib.org/articles/non-interactive-auth.html&gt;
+ℹ The googlesheets4 package is using a cached token for 'slillywh@uci.edu'.
+Auto-refreshing stale OAuth token.
+✔ Reading from "IGNITE Data Sheet".
+✔ Range "'RCoding'".</code></pre>
+</div>
 </div>
 <p>Data is already really clean, will save the chunk below in case of data cleaning</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">#data cleaning here!</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co">#There is one reading of black mustard that is 600 FMC, will take that out</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>IGNITE_Data_Sheet_2 <span class="ot">&lt;-</span> IGNITE_Data_Sheet <span class="sc">|&gt;</span> </span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>( FMC <span class="sc">&lt;</span> <span class="dv">500</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Site =</span> <span class="fu">as.factor</span>(Site))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#data cleaning here!</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co">#There is one reading of black mustard that is 600 FMC, will take that out</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>IGNITE_Data_Sheet_2 <span class="ot">&lt;-</span> IGNITE_Data_Sheet <span class="sc">|&gt;</span> </span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Sample_ID <span class="sc">!=</span> <span class="st">"2_BRNI_261027_1"</span>,</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>         Sample_ID <span class="sc">!=</span> <span class="st">"3_BRNI_261027_1"</span> ,</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>         Sample_ID <span class="sc">!=</span> <span class="st">"4_BRNI_261027_3"</span>)<span class="sc">|&gt;</span> </span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Site =</span> <span class="fu">as.factor</span>(Site))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Exploratory Data Graphing</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(IGNITE_Data_Sheet_2) <span class="sc">+</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> Species, <span class="at">y =</span> FMC, <span class="at">fill =</span> <span class="fu">as.factor</span>(Site)) <span class="sc">+</span> </span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>()<span class="sc">+</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set2"</span>)<span class="sc">+</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(IGNITE_Data_Sheet_2) <span class="sc">+</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> Species, <span class="at">y =</span> FMC, <span class="at">fill =</span> <span class="fu">as.factor</span>(Site)) <span class="sc">+</span> </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>()<span class="sc">+</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Set2"</span>)<span class="sc">+</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -190,10 +209,10 @@ The following object is masked from 'package:stats':
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(IGNITE_Data_Sheet_2)<span class="sc">+</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> Species, <span class="at">y =</span> Wet_Mass)<span class="sc">+</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(IGNITE_Data_Sheet_2)<span class="sc">+</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> Species, <span class="at">y =</span> Wet_Mass)<span class="sc">+</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -201,10 +220,10 @@ The following object is masked from 'package:stats':
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(IGNITE_Data_Sheet_2)<span class="sc">+</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> Species, <span class="at">y =</span> Dry_Mass)<span class="sc">+</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(IGNITE_Data_Sheet_2)<span class="sc">+</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> Species, <span class="at">y =</span> Dry_Mass)<span class="sc">+</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -213,14 +232,14 @@ The following object is masked from 'package:stats':
 </div>
 </div>
 </div>
-<p>In this very rough estimate you can see that our buckwheat had the highest combined FMC for the first sampling event</p>
-<p>We need to collect alot more of each species, 2 inches from four sides of the plant (8 inches total) is not enough (except for lemonade berry</p>
-<p>Sagebrush dried the most between wet and dry weight</p>
+</section>
+<section id="exploratory-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="exploratory-analysis">Exploratory Analysis</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>IGNITE_Summary <span class="ot">&lt;-</span> IGNITE_Data_Sheet_2 <span class="sc">|&gt;</span> </span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Species, Site ) <span class="sc">|&gt;</span> </span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">Mean_FMC =</span> <span class="fu">mean</span>(FMC, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">sd_FMC =</span> <span class="fu">sd</span>(FMC, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>IGNITE_Summary <span class="ot">&lt;-</span> IGNITE_Data_Sheet_2 <span class="sc">|&gt;</span> </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Species, Site ) <span class="sc">|&gt;</span> </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">Mean_FMC =</span> <span class="fu">mean</span>(FMC, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">sd_FMC =</span> <span class="fu">sd</span>(FMC, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`summarise()` has regrouped the output.
 ℹ Summaries were computed grouped by Species and Site.
@@ -229,13 +248,14 @@ The following object is masked from 'package:stats':
 ℹ Use `summarise(.by = c(Species, Site))` for per-operation grouping
   (`?dplyr::dplyr_by`) instead.</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(IGNITE_Summary) <span class="sc">+</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> Species, <span class="at">y =</span> Mean_FMC, <span class="at">fill =</span> Species)<span class="sc">+</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"dodge"</span>)<span class="sc">+</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> Mean_FMC <span class="sc">-</span> sd_FMC, </span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">ymax =</span> Mean_FMC <span class="sc">+</span> sd_FMC, <span class="at">width =</span> <span class="fl">0.5</span>))<span class="sc">+</span></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">facet_wrap</span>(Site<span class="sc">~</span>.)<span class="sc">+</span></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(IGNITE_Summary) <span class="sc">+</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> Species, <span class="at">y =</span> Mean_FMC, <span class="at">fill =</span> Species)<span class="sc">+</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"dodge"</span>)<span class="sc">+</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> Mean_FMC <span class="sc">-</span> sd_FMC, </span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">ymax =</span> Mean_FMC <span class="sc">+</span> sd_FMC, <span class="at">width =</span> <span class="fl">0.5</span>))<span class="sc">+</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">facet_wrap</span>(Site<span class="sc">~</span>.)<span class="sc">+</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">theme_bw</span>()<span class="sc">+</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">68</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">7</span>, <span class="at">color =</span> <span class="st">"black"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -243,13 +263,58 @@ The following object is masked from 'package:stats':
 </figure>
 </div>
 </div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>IGNITE_Summary_Sampling_Dates <span class="ot">&lt;-</span> IGNITE_Data_Sheet_2 <span class="sc">|&gt;</span> </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Species, Date ) <span class="sc">|&gt;</span> </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">Mean_FMC =</span> <span class="fu">mean</span>(FMC, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">sd_FMC =</span> <span class="fu">sd</span>(FMC, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has regrouped the output.
+ℹ Summaries were computed grouped by Species and Date.
+ℹ Output is grouped by Species.
+ℹ Use `summarise(.groups = "drop_last")` to silence this message.
+ℹ Use `summarise(.by = c(Species, Date))` for per-operation grouping
+  (`?dplyr::dplyr_by`) instead.</code></pre>
 </div>
-<p>The sagebrush error bars in site 4 can be explained by the very different masses collected at the site</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>IGNITE_Summary_Sampling_Dates</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 4
+# Groups:   Species [4]
+   Species              Date                Mean_FMC sd_FMC
+   &lt;chr&gt;                &lt;dttm&gt;                 &lt;dbl&gt;  &lt;dbl&gt;
+ 1 Black mustard        2026-10-27 00:00:00    75.9   28.8 
+ 2 Black mustard        2026-11-10 00:00:00     7.85   1.66
+ 3 California buckwheat 2026-10-27 00:00:00    94.9   21.8 
+ 4 California buckwheat 2026-11-10 00:00:00   107.    18.1 
+ 5 California buckwheat 2026-11-16 00:00:00   132.    25.7 
+ 6 California sagebrush 2026-10-27 00:00:00   115.    78.5 
+ 7 California sagebrush 2026-11-10 00:00:00   164.    92.4 
+ 8 California sagebrush 2026-11-16 00:00:00   306.   111.  
+ 9 Lemonade berry       2026-10-27 00:00:00   106.     5.46
+10 Lemonade berry       2026-11-10 00:00:00   109.     4.93</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(IGNITE_Summary_Sampling_Dates) <span class="sc">+</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> Species, <span class="at">y =</span> Mean_FMC, <span class="at">fill =</span> Species)<span class="sc">+</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"dodge"</span>)<span class="sc">+</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> Mean_FMC <span class="sc">-</span> sd_FMC, </span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">ymax =</span> Mean_FMC <span class="sc">+</span> sd_FMC, <span class="at">width =</span> <span class="fl">0.5</span>))<span class="sc">+</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(Date<span class="sc">~</span>.)<span class="sc">+</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()<span class="sc">+</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">68</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">7</span>, <span class="at">color =</span> <span class="st">"black"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="IGNITE_Data_files/figure-html/unnamed-chunk-4-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Interesting differences between the two dates</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(IGNITE_Summary) <span class="sc">+</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> Species, <span class="at">y =</span> Mean_FMC, <span class="at">fill =</span> Species)<span class="sc">+</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"dodge"</span>)<span class="sc">+</span></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(IGNITE_Summary) <span class="sc">+</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> Species, <span class="at">y =</span> Mean_FMC, <span class="at">fill =</span> Species)<span class="sc">+</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"dodge"</span>)<span class="sc">+</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()<span class="sc">+</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>, <span class="at">color =</span> <span class="st">"black"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -257,6 +322,7 @@ The following object is masked from 'package:stats':
 </figure>
 </div>
 </div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">#combined results so far</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Mustard’s numbers are inflated due to having little to 0 wet mass</p>
 </section>
@@ -264,9 +330,9 @@ The following object is masked from 'package:stats':
 <h2 class="anchored" data-anchor-id="statistics">Statistics</h2>
 <p>Tests for Normality</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(IGNITE_Data_Sheet_2)<span class="sc">+</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> FMC)<span class="sc">+</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(IGNITE_Data_Sheet_2)<span class="sc">+</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> FMC)<span class="sc">+</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`stat_bin()` using `bins = 30`. Pick better value `binwidth`.</code></pre>
 </div>
@@ -277,13 +343,24 @@ The following object is masked from 'package:stats':
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Data does not look that normal, will proceed</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>FMC_model <span class="ot">&lt;-</span> <span class="fu">lmer</span>(FMC<span class="sc">~</span>Species <span class="sc">+</span> Phenology <span class="sc">+</span> Percent_Green <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> Site<span class="sc">/</span>Rep), <span class="at">data =</span> IGNITE_Data_Sheet_2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>boundary (singular) fit: see help('isSingular')</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(FMC_model, <span class="at">which =</span> <span class="st">"2"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>IGNITE_Data_Sheet_3 <span class="ot">&lt;-</span> IGNITE_Data_Sheet_2 <span class="sc">|&gt;</span> </span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Sample_ID <span class="sc">!=</span> <span class="st">"1_ARCA_261116_3"</span>)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Data does not look that normal, will proceed</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="co">#FMC_model &lt;- lmer(FMC ~ Species + Phenology + Percent_Green + (1 | Site/Bottle_ID) + (1| Date), data = IGNITE_Data_Sheet_2)</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Boundary error, let me see what I can drop</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="co">#summary(FMC_model)</span></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a><span class="co">#VarCorr(FMC_model)</span></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a><span class="co">#Site and Bottle ID was causing the issue, will drop it for now...</span></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>FMC_model <span class="ot">&lt;-</span> <span class="fu">lmer</span>(FMC <span class="sc">~</span> Species <span class="sc">+</span> Phenology <span class="sc">+</span> Percent_Green  <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span> Date), <span class="at">data =</span> IGNITE_Data_Sheet_3)</span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a><span class="co">#Perfect, it no longer pops up</span></span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">residuals</span>(FMC_model))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -291,7 +368,38 @@ The following object is masked from 'package:stats':
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggqqplot</span>(<span class="fu">residuals</span>(FMC_model))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">residuals</span>(FMC_model) <span class="sc">|&gt;</span> <span class="fu">sort</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         5          6         44         20         35          3         50 
+-71.362500 -48.861649 -44.910560 -33.243754 -32.776901 -31.798605 -30.981149 
+         1         71         34         72         70         36         67 
+-29.606091 -28.028760 -27.792774 -27.389663 -27.243636 -26.003150 -25.858949 
+        59         69         58         68         90         89         94 
+-25.250982 -25.211171 -24.738605 -24.220470 -24.130455 -24.012367 -23.197584 
+        60         88         43         30         98         17         29 
+-23.127770 -22.986919 -18.349961 -18.292774 -18.278705 -17.588665 -16.181722 
+        18          8         10         32         39         82         66 
+-12.745784 -11.815853 -11.345105 -10.961152 -10.241050 -10.103205  -9.248303 
+        11         27         78         83          9         75         73 
+ -8.713526  -8.176191  -8.167663  -7.492216  -7.177634  -5.898602  -5.021743 
+        96         15         40         31         28          7         38 
+ -4.915811  -4.329222  -3.856791  -3.815853  -3.514832  -3.123594  -2.639823 
+        13         37         74         16         87         63         33 
+ -2.318330  -2.157905  -1.840625  -1.815853  -1.726284  -1.366509   1.739702 
+        91         14         54         61         56         53         55 
+  1.976634   2.126115   3.146539   3.930670   4.246364   4.377069   4.548982 
+        77         93         79         84          2         80         85 
+  5.965931   6.234213   6.486592   6.496795   6.539953   7.452485   7.618644 
+        48         52         86         81         62         46         51 
+  7.942246   8.896937  10.113716  12.414293  12.582750  12.587704  14.909748 
+        92         64         26         76         19          4         47 
+ 17.223224  17.782510  19.096536  21.607032  22.602288  22.653589  24.746795 
+        95         41         49         42         12         23         97 
+ 28.647408  35.459448  35.547892  37.681670  42.594323  43.395956  43.563400 
+        25         45         65         22         24         57         21 
+ 43.614802  48.861649  50.015523  57.681670  57.681670  58.815944  74.348337 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(FMC_model, <span class="at">which =</span> <span class="st">"2"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -299,65 +407,218 @@ The following object is masked from 'package:stats':
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(FMC_model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggqqplot</span>(<span class="fu">residuals</span>(FMC_model))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="IGNITE_Data_files/figure-html/unnamed-chunk-6-4.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(FMC_model)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Linear mixed model fit by REML. t-tests use Satterthwaite's method [
 lmerModLmerTest]
-Formula: FMC ~ Species + Phenology + Percent_Green + (1 | Site/Rep)
-   Data: IGNITE_Data_Sheet_2
+Formula: FMC ~ Species + Phenology + Percent_Green + (1 | Date)
+   Data: IGNITE_Data_Sheet_3
 
-REML criterion at convergence: 408.6
+REML criterion at convergence: 873.6
 
 Scaled residuals: 
-    Min      1Q  Median      3Q     Max 
--1.5151 -0.4034 -0.0911  0.1865  3.5890 
+     Min       1Q   Median       3Q      Max 
+-2.62732 -0.67335 -0.09127  0.43588  2.73725 
 
 Random effects:
  Groups   Name        Variance Std.Dev.
- Rep:Site (Intercept)    0.00   0.000  
- Site     (Intercept)   59.78   7.731  
- Residual             1587.72  39.846  
-Number of obs: 47, groups:  Rep:Site, 15; Site, 5
+ Date     (Intercept) 987.7    31.43   
+ Residual             737.8    27.16   
+Number of obs: 98, groups:  Date, 3
 
 Fixed effects:
-                             Estimate Std. Error        df t value Pr(&gt;|t|)    
-(Intercept)                  246.4525    52.3801   36.8852   4.705 3.52e-05 ***
-SpeciesCalifornia buckwheat -183.8435    43.7270   35.9765  -4.204 0.000166 ***
-SpeciesCalifornia sagebrush  -76.3041    31.1377   37.9945  -2.451 0.018980 *  
-SpeciesLemonade berry       -168.1517    59.0742   36.2082  -2.846 0.007237 ** 
-PhenologyDead               -144.2649    50.8335   37.4171  -2.838 0.007293 ** 
-PhenologyDormant            -103.9420    49.3221   36.6380  -2.107 0.041988 *  
-PhenologyFlowering           -40.4239    49.9503   37.6078  -0.809 0.423443    
-PhenologyMature               13.4690    49.8450   35.3221   0.270 0.788565    
-Percent_Green                  0.2695     0.3843   37.4481   0.701 0.487441    
+                              Estimate Std. Error         df t value Pr(&gt;|t|)
+(Intercept)                  248.60800   27.55190    7.79785   9.023 2.14e-05
+SpeciesCalifornia buckwheat  -97.43153   19.37434   86.93433  -5.029 2.62e-06
+SpeciesCalifornia sagebrush  -18.99062   14.82399   86.74768  -1.281  0.20358
+SpeciesLemonade berry       -129.99587   22.22628   86.78962  -5.849 8.55e-08
+PhenologyDead               -193.65189   19.08027   86.92150 -10.149  &lt; 2e-16
+PhenologyDormant            -150.97509   23.24464   87.02039  -6.495 4.96e-09
+PhenologyFlowering           -57.30978   17.62097   88.96448  -3.252  0.00162
+PhenologyMature              -35.66667   15.94482   87.26620  -2.237  0.02784
+Percent_Green                  0.05842    0.20229   87.06457   0.289  0.77345
+                               
+(Intercept)                 ***
+SpeciesCalifornia buckwheat ***
+SpeciesCalifornia sagebrush    
+SpeciesLemonade berry       ***
+PhenologyDead               ***
+PhenologyDormant            ***
+PhenologyFlowering          ** 
+PhenologyMature             *  
+Percent_Green                  
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Correlation of Fixed Effects:
             (Intr) SpcsCb SpcsCs SpcsLb PhnlgyDd PhnlgyDr PhnlgF PhnlgM
-SpcsClfrnbc -0.396                                                     
-SpcsClfrnsg -0.604  0.702                                              
-SpcsLmndbrr -0.749  0.455  0.526                                       
-PhenologyDd -0.971  0.342  0.532  0.724                                
-PhnlgyDrmnt -0.647 -0.009  0.005  0.504  0.664                         
-PhnlgyFlwrn -0.612  0.029  0.006  0.590  0.625    0.656                
-PhenolgyMtr -0.587 -0.325  0.011  0.637  0.605    0.631    0.661       
-Percent_Grn -0.207 -0.161  0.015 -0.462  0.212    0.105   -0.081 -0.181
-optimizer (nloptwrap) convergence code: 0 (OK)
-boundary (singular) fit: see help('isSingular')</code></pre>
+SpcsClfrnbc -0.338                                                     
+SpcsClfrnsg -0.542  0.762                                              
+SpcsLmndbrr -0.376  0.596  0.667                                       
+PhenologyDd -0.702  0.414  0.658  0.469                                
+PhnlgyDrmnt -0.273 -0.061  0.008  0.086  0.382                         
+PhnlgyFlwrn -0.321 -0.284  0.005  0.245  0.370    0.318                
+PhenolgyMtr -0.268 -0.414  0.006  0.345  0.354    0.323    0.708       
+Percent_Grn -0.320 -0.179  0.006 -0.517  0.438    0.276    0.085 -0.041</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(FMC_model, <span class="at">type =</span> <span class="st">"2"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(FMC_model, <span class="at">type =</span> <span class="st">"2"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Type II Analysis of Variance Table with Satterthwaite's method
-              Sum Sq Mean Sq NumDF  DenDF F value   Pr(&gt;F)   
-Species        31758 10585.9     3 36.533  6.6674 0.001052 **
-Phenology      26092  6523.0     4 36.015  4.1084 0.007631 **
-Percent_Green    781   780.9     1 37.448  0.4918 0.487441   
+              Sum Sq Mean Sq NumDF  DenDF F value    Pr(&gt;F)    
+Species        53663 17887.8     3 86.920 24.2462 1.713e-11 ***
+Phenology      85273 21318.2     4 87.826 28.8959 2.495e-15 ***
+Percent_Green     62    61.5     1 87.065  0.0834    0.7734    
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </div>
 <p>There are significant differences between species and phenology (need to look more into this one )</p>
+<section id="post-hoc" class="level3">
+<h3 class="anchored" data-anchor-id="post-hoc">POST-HOC</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>emmeans<span class="sc">::</span><span class="fu">emmeans</span>(FMC_model, pairwise <span class="sc">~</span> Species, <span class="at">adjust =</span> <span class="st">"tukey"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$emmeans
+ Species              emmean   SE   df lower.CL upper.CL
+ Black mustard         164.1 23.4 4.74    102.8    225.3
+ California buckwheat   66.6 21.3 3.20      1.1    132.2
+ California sagebrush  145.1 20.1 2.58     74.7    215.4
+ Lemonade berry         34.1 23.1 4.41    -27.7     95.8
+
+Results are averaged over the levels of: Phenology 
+Degrees-of-freedom method: kenward-roger 
+Confidence level used: 0.95 
+
+$contrasts
+ contrast                                    estimate   SE   df t.ratio p.value
+ Black mustard - California buckwheat            97.4 19.4 87.2   5.024 &lt;0.0001
+ Black mustard - California sagebrush            19.0 14.8 87.0   1.281  0.5774
+ Black mustard - Lemonade berry                 130.0 22.2 87.0   5.847 &lt;0.0001
+ California buckwheat - California sagebrush    -78.4 12.6 87.4  -6.235 &lt;0.0001
+ California buckwheat - Lemonade berry           32.6 18.9 87.1   1.726  0.3167
+ California sagebrush - Lemonade berry          111.0 16.6 87.1   6.698 &lt;0.0001
+
+Results are averaged over the levels of: Phenology 
+Degrees-of-freedom method: kenward-roger 
+P value adjustment: tukey method for comparing a family of 4 estimates </code></pre>
+</div>
+</div>
+<p>Statistical differences:</p>
+<ul>
+<li><p>Black Mustard - California buckwheat</p></li>
+<li><p>Black Mustard - Lemonade Berry</p></li>
+<li><p>California sagebrush - Lemonade Berry</p></li>
+<li><p>Buckwheat - Sagebrush</p></li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>IGNITE_Summary_Species <span class="ot">&lt;-</span> IGNITE_Data_Sheet_2 <span class="sc">|&gt;</span> </span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>(Species <span class="sc">==</span> <span class="st">"California sagebrush"</span> <span class="sc">&amp;</span> Phenology <span class="sc">==</span> <span class="st">"Dead"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>(Species <span class="sc">==</span> <span class="st">"California sagebrush"</span> <span class="sc">&amp;</span> Phenology <span class="sc">==</span> <span class="st">"Dormant"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Species) <span class="sc">|&gt;</span> </span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">Mean_FMC =</span> <span class="fu">mean</span>(FMC, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">sd_FMC =</span> <span class="fu">sd</span>(FMC, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a><span class="co">#This is with dead and dormant sagebrush removed </span></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(IGNITE_Summary_Species) <span class="sc">+</span></span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> Species, <span class="at">y =</span> Mean_FMC, <span class="at">fill =</span> Species)<span class="sc">+</span></span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"dodge"</span>)<span class="sc">+</span></span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> Mean_FMC <span class="sc">-</span> sd_FMC, </span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a>                    <span class="at">ymax =</span> Mean_FMC <span class="sc">+</span> sd_FMC, <span class="at">width =</span> <span class="fl">0.5</span>))<span class="sc">+</span></span>
+<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a>  <span class="co">#facet_wrap(Species~.)+</span></span>
+<span id="cb44-17"><a href="#cb44-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()<span class="sc">+</span></span>
+<span id="cb44-18"><a href="#cb44-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">68</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">7</span>, <span class="at">color =</span> <span class="st">"black"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="IGNITE_Data_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>emmeans<span class="sc">::</span><span class="fu">emmeans</span>(FMC_model, pairwise <span class="sc">~</span> Phenology, <span class="at">adjust =</span> <span class="st">"tukey"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$emmeans
+ Phenology emmean   SE   df lower.CL upper.CL
+ Budding   189.98 21.3 3.11    123.6    256.4
+ Dead       -3.67 22.8 4.13    -66.1     58.7
+ Dormant    39.00 28.0 9.22    -24.1    102.1
+ Flowering 132.67 21.8 3.60     69.3    196.0
+ Mature    154.31 21.2 3.19     88.9    219.7
+
+Results are averaged over the levels of: Species 
+Degrees-of-freedom method: kenward-roger 
+Confidence level used: 0.95 
+
+$contrasts
+ contrast            estimate   SE   df t.ratio p.value
+ Budding - Dead         193.7 19.1 87.2  10.140 &lt;0.0001
+ Budding - Dormant      151.0 23.3 87.2   6.485 &lt;0.0001
+ Budding - Flowering     57.3 18.0 89.0   3.192  0.0163
+ Budding - Mature        35.7 16.0 87.5   2.231  0.1783
+ Dead - Dormant         -42.7 23.8 87.0  -1.794  0.3836
+ Dead - Flowering      -136.3 20.9 88.5  -6.538 &lt;0.0001
+ Dead - Mature         -158.0 20.1 87.1  -7.866 &lt;0.0001
+ Dormant - Flowering    -93.7 24.5 88.2  -3.825  0.0022
+ Dormant - Mature      -115.3 23.6 87.1  -4.890 &lt;0.0001
+ Flowering - Mature     -21.6 13.2 88.9  -1.646  0.4726
+
+Results are averaged over the levels of: Species 
+Degrees-of-freedom method: kenward-roger 
+P value adjustment: tukey method for comparing a family of 5 estimates </code></pre>
+</div>
+</div>
+<p>Statistical differences:</p>
+<ul>
+<li><p>Budding - Dead</p></li>
+<li><p>Budding - Dormant</p></li>
+<li><p>Dead - Flowering</p></li>
+<li><p>Dead - Mature</p></li>
+<li><p>Dormant - Mature</p></li>
+</ul>
+<p>These differences really make sense, nothing noteworthy from these</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>IGNITE_Summary_Phenology <span class="ot">&lt;-</span> IGNITE_Data_Sheet_2 <span class="sc">|&gt;</span> </span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Species, Phenology ) <span class="sc">|&gt;</span> </span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">Mean_FMC =</span> <span class="fu">mean</span>(FMC, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">sd_FMC =</span> <span class="fu">sd</span>(FMC, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has regrouped the output.
+ℹ Summaries were computed grouped by Species and Phenology.
+ℹ Output is grouped by Species.
+ℹ Use `summarise(.groups = "drop_last")` to silence this message.
+ℹ Use `summarise(.by = c(Species, Phenology))` for per-operation grouping
+  (`?dplyr::dplyr_by`) instead.</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(IGNITE_Summary_Phenology) <span class="sc">+</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> Phenology, <span class="at">y =</span> Mean_FMC, <span class="at">fill =</span> Species)<span class="sc">+</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">position =</span> <span class="st">"dodge"</span>)<span class="sc">+</span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> Mean_FMC <span class="sc">-</span> sd_FMC, </span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">ymax =</span> Mean_FMC <span class="sc">+</span> sd_FMC, <span class="at">width =</span> <span class="fl">0.5</span>))<span class="sc">+</span></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(Species<span class="sc">~</span>.)<span class="sc">+</span></span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()<span class="sc">+</span></span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">68</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">7</span>, <span class="at">color =</span> <span class="st">"black"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="IGNITE_Data_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Makes sense since flowering is a new phenology type</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Also it makes sense with the variation between dead and dormant for the Sd</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
 </section>
 
 </main>

@@ -1,0 +1,233 @@
+---
+title: "Ignite Data"
+format: html
+editor: visual
+---
+
+## IGNITE CAPSTONE
+
+## Bringing in the Data and Setting up the Library
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(dplyr)
+library(lme4)
+library(lmerTest)
+library(ggpubr)
+library(googlesheets4)
+
+#IGNITE_Data_Sheet <- read_excel("IGNITE Data Sheet.xlsx", 
+   #                             sheet = "RCoding")
+
+IGNITE_Data_Sheet<-googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1Z7aurgQzPtNckHCvg0PXA97xKa3VXuFM_nTSHRgTMcY/edit?gid=125710380#gid=125710380", sheet = "RCoding")
+```
+
+Data is already really clean, will save the chunk below in case of data cleaning
+
+```{r}
+#data cleaning here!
+#There is one reading of black mustard that is 600 FMC, will take that out
+
+IGNITE_Data_Sheet_2 <- IGNITE_Data_Sheet |> 
+  filter(Sample_ID != "2_BRNI_261027_1",
+         Sample_ID != "3_BRNI_261027_1" ,
+         Sample_ID != "4_BRNI_261027_3")|> 
+  mutate(Site = as.factor(Site))
+
+
+
+```
+
+Exploratory Data Graphing
+
+```{r}
+ggplot(IGNITE_Data_Sheet_2) +
+  aes(x = Species, y = FMC, fill = as.factor(Site)) + 
+  geom_col()+
+  scale_fill_brewer(palette = "Set2")+
+  
+  theme_bw()
+
+
+ggplot(IGNITE_Data_Sheet_2)+
+  aes(x = Species, y = Wet_Mass)+
+  geom_boxplot()+
+  theme_bw()
+
+ggplot(IGNITE_Data_Sheet_2)+
+  aes(x = Species, y = Dry_Mass)+
+  geom_boxplot()+
+  theme_bw()
+```
+
+## Exploratory Analysis
+
+```{r}
+
+IGNITE_Summary <- IGNITE_Data_Sheet_2 |> 
+  group_by(Species, Site ) |> 
+  summarize(Mean_FMC = mean(FMC, na.rm = TRUE),
+            sd_FMC = sd(FMC, na.rm = TRUE))
+
+ggplot(IGNITE_Summary) +
+  aes(x = Species, y = Mean_FMC, fill = Species)+
+  geom_col(position = "dodge")+
+  geom_errorbar(aes(ymin = Mean_FMC - sd_FMC, 
+                ymax = Mean_FMC + sd_FMC, width = 0.5))+
+                  facet_wrap(Site~.)+
+                  theme_bw()+
+                  theme(axis.text.x = element_text(angle = 68, hjust = 1, size = 7, color = "black"))
+
+IGNITE_Summary_Sampling_Dates <- IGNITE_Data_Sheet_2 |> 
+  group_by(Species, Date ) |> 
+  summarize(Mean_FMC = mean(FMC, na.rm = TRUE),
+            sd_FMC = sd(FMC, na.rm = TRUE))
+
+IGNITE_Summary_Sampling_Dates
+
+ggplot(IGNITE_Summary_Sampling_Dates) +
+  aes(x = Species, y = Mean_FMC, fill = Species)+
+  geom_col(position = "dodge")+
+  geom_errorbar(aes(ymin = Mean_FMC - sd_FMC, 
+                    ymax = Mean_FMC + sd_FMC, width = 0.5))+
+  facet_wrap(Date~.)+
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 68, hjust = 1, size = 7, color = "black"))
+
+
+```
+
+Interesting differences between the two dates
+
+```{r}
+ggplot(IGNITE_Summary) +
+  aes(x = Species, y = Mean_FMC, fill = Species)+
+  geom_col(position = "dodge")+
+  theme_bw()+
+  theme(axis.text.x = element_text(size = 7, color = "black"))
+
+#combined results so far
+```
+
+Mustard's numbers are inflated due to having little to 0 wet mass
+
+## Statistics
+
+Tests for Normality
+
+```{r}
+ggplot(IGNITE_Data_Sheet_2)+
+  aes(x = FMC)+
+  geom_histogram()
+
+IGNITE_Data_Sheet_3 <- IGNITE_Data_Sheet_2 |> 
+  filter(Sample_ID != "1_ARCA_261116_3")
+  
+#Data does not look that normal, will proceed
+
+#FMC_model <- lmer(FMC ~ Species + Phenology + Percent_Green + (1 | Site/Bottle_ID) + (1| Date), data = IGNITE_Data_Sheet_2)
+
+#Boundary error, let me see what I can drop
+
+#summary(FMC_model)
+#VarCorr(FMC_model)
+
+#Site and Bottle ID was causing the issue, will drop it for now...
+
+FMC_model <- lmer(FMC ~ Species + Phenology + Percent_Green  + (1| Date), data = IGNITE_Data_Sheet_3)
+
+#Perfect, it no longer pops up
+hist(residuals(FMC_model))
+
+residuals(FMC_model) |> sort()
+
+plot(FMC_model, which = "2")
+
+ggqqplot(residuals(FMC_model))
+
+summary(FMC_model)
+anova(FMC_model, type = "2")
+
+
+```
+
+There are significant differences between species and phenology (need to look more into this one )
+
+### POST-HOC
+
+```{r}
+emmeans::emmeans(FMC_model, pairwise ~ Species, adjust = "tukey")
+
+```
+
+Statistical differences:
+
+- Black Mustard - California buckwheat
+
+- Black Mustard - Lemonade Berry
+
+- California sagebrush - Lemonade Berry
+
+- Buckwheat - Sagebrush
+
+```{r}
+IGNITE_Summary_Species <- IGNITE_Data_Sheet_3 |> 
+  filter(!(Species == "California sagebrush" & Phenology == "Dead")) |> 
+  filter(!(Species == "California sagebrush" & Phenology == "Dormant")) |> 
+  group_by(Species) |> 
+  summarize(Mean_FMC = mean(FMC, na.rm = TRUE),
+            sd_FMC = sd(FMC, na.rm = TRUE))
+
+
+
+#This is with dead and dormant sagebrush removed 
+ggplot(IGNITE_Summary_Species) +
+  aes(x = Species, y = Mean_FMC, fill = Species)+
+  geom_col(position = "dodge")+
+  geom_errorbar(aes(ymin = Mean_FMC - sd_FMC, 
+                    ymax = Mean_FMC + sd_FMC, width = 0.5))+
+  #facet_wrap(Species~.)+
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 68, hjust = 1, size = 7, color = "black"))
+```
+
+```{r}
+emmeans::emmeans(FMC_model, pairwise ~ Phenology, adjust = "tukey")
+```
+
+Statistical differences:
+
+- Budding - Dead
+
+- Budding - Dormant
+
+- Dead - Flowering
+
+- Dead - Mature
+
+- Dormant - Mature
+
+These differences really make sense, nothing noteworthy from these
+
+```{r}
+
+IGNITE_Summary_Phenology <- IGNITE_Data_Sheet_3 |> 
+  group_by(Species, Phenology ) |> 
+  summarize(Mean_FMC = mean(FMC, na.rm = TRUE),
+            sd_FMC = sd(FMC, na.rm = TRUE))
+
+
+
+ggplot(IGNITE_Summary_Phenology) +
+  aes(x = Phenology, y = Mean_FMC, fill = Species)+
+  geom_col(position = "dodge")+
+  geom_errorbar(aes(ymin = Mean_FMC - sd_FMC, 
+                    ymax = Mean_FMC + sd_FMC, width = 0.5))+
+  facet_wrap(Species~.)+
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 68, hjust = 1, size = 7, color = "black"))
+
+#Makes sense since flowering is a new phenology type
+#Also it makes sense with the variation between dead and dormant for the Sd
+```
